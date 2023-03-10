@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 final class NewsViewCell: UITableViewCell {
     
@@ -13,27 +14,25 @@ final class NewsViewCell: UITableViewCell {
         String(describing: self)
     }
     
-    var titleLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.numberOfLines = 3
         return label
     }()
     
-    var createdDateLabel: UILabel = {
+    private var createdDateLabel: UILabel = {
         let label = UILabel()
         label.textColor = .lightGray
         label.font = UIFont.preferredFont(forTextStyle: .footnote)
         return label
     }()
     
-    var imageNews: UIImageView = {
+    private var imageNews: UIImageView = {
         let image = UIImageView()
-        
+    
         image.contentMode = . scaleAspectFit
-        image.backgroundColor = .gray
-        image.layer.borderWidth = 1
-        image.layer.cornerRadius = 10
+        image.layer.cornerRadius = 8
         image.clipsToBounds = true
         
         return image
@@ -41,6 +40,7 @@ final class NewsViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         setupSubviews()
         setupConstraints()
     }
@@ -51,11 +51,22 @@ final class NewsViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         titleLabel.text = nil
         createdDateLabel.text = nil
         imageNews.image = nil
     }
-        
+    
+    func configure(with viewModel: NewsViewModel, at index: Int) {
+        titleLabel.text = viewModel.titles[index]
+        createdDateLabel.text = viewModel.dates[index]
+        if index < viewModel.newsImages.count {
+            imageNews.sd_setImage(with: URL(string: viewModel.newsImages[index]), placeholderImage: nil, options: [.progressiveLoad])
+        } else {
+            imageNews.image = nil
+        }
+    }
+    
     private func setupSubviews() {
         let subviews = [titleLabel, createdDateLabel, imageNews]
         
@@ -72,7 +83,6 @@ final class NewsViewCell: UITableViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: imageNews.layoutMarginsGuide.leadingAnchor, constant: -16),
             
             createdDateLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
-            createdDateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             createdDateLabel.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
             
             imageNews.widthAnchor.constraint(equalToConstant: 85),

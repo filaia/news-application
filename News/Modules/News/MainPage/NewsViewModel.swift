@@ -7,22 +7,26 @@
 
 import Foundation
 
-class MainViewModel {
-
-    var news: News?
+final class NewsViewModel {
     
     var newsCount: Int {
         news?.results.count ?? 0
     }
     
-    var title: [String] {
+   var dates: [String] {
+       news?.results.map { Date.getFormatDate($0.publishedDate) } ?? []
+   }
+    
+    var titles: [String] {
         news?.results.map { $0.title } ?? []
     }
     
-    var date: [String] {
-        news?.results.map { $0.publishedDate } ?? []
+    var newsImages: [String] {
+        news?.results.compactMap { $0.media.first?.mediaMetadata.first?.url } ?? []
     }
-    
+      
+    private var news: News?
+
     // TODO: title for navbar that changes depending on endpoint
         
     // TODO: weak self?

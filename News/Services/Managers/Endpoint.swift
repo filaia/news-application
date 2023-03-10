@@ -26,7 +26,7 @@ enum Endpoint {
 
 private extension URL {
     static func makeForEndpoint(endpoint: Endpoint) -> URL {
-        guard let url = URL(string: "\(APIConstants.baseURL)\(endpoint)/1.json?api-key=\(APIConstants.key)") else {
+        guard let url = URL(string: "\(API.baseURL.rawValue)\(endpoint)/1.json?api-key=\(API.key.rawValue)") else {
             preconditionFailure("Invald URL")
         }
         return url

@@ -17,11 +17,11 @@ struct Media: Codable {
 
 struct MediaMetadata: Codable {
     let url: String
-   // let format: Format
+    let format: Format
 }
 
 enum Format: String, Codable {
-    case standardThubnail = "Standard Thubnail"
+    case standardThumbnail = "Standard Thumbnail"
     case mediumThreeByTwo20 = "mediumThreeByTwo210"
     case mediumThreeByTwo440 = "mediumThreeByTwo440"
 }
